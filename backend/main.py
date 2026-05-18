@@ -1,9 +1,23 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.router import api_router
-from app.core.database import engine, Base
 
-app = FastAPI(title="旅程AI API", version="1.0.0")
+from app.api.router import api_router
+
+
+# database module created in Task 1.1
+# from app.core.database import engine, Base
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: DB tables created via Alembic migrations or Task 1.1
+    yield
+    # Shutdown: cleanup if needed
+
+
+app = FastAPI(title="旅程AI API", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -14,12 +28,6 @@ app.add_middleware(
 )
 
 app.include_router(api_router, prefix="/api")
-
-
-@app.on_event("startup")
-async def startup():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
 
 
 @app.get("/api/health")
