@@ -6,13 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.router import api_router
 
 
-# database module created in Task 1.1
-# from app.core.database import engine, Base
+from app.core.database import engine, Base
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: DB tables created via Alembic migrations or Task 1.1
+    # Startup: create database tables
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
     yield
     # Shutdown: cleanup if needed
 
