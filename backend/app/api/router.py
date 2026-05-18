@@ -1,4 +1,6 @@
 from fastapi import APIRouter
 
+from app.api.trip import router as trip_router
+
 api_router = APIRouter()
-# 后续 Task 3.1 挂载 trip_router
+api_router.include_router(trip_router, prefix="/trip")
