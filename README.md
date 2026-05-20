@@ -126,3 +126,11 @@ celery -A app.tasks.celery_app worker --loglevel=info
 ## API 文档
 
 启动后端后访问 http://localhost:8000/docs 查看 Swagger UI。
+<img width="1860" height="915" alt="3a9110614c30f85809ea94639da64d8e" src="https://github.com/user-attachments/assets/4aaf315f-d57a-4740-b28d-2e98f2b2d9b9" />
+
+<img width="1369" height="810" alt="aeba8d7a2f663fd5081a0bf10e02ac2e" src="https://github.com/user-attachments/assets/f8588083-448d-4d00-9fdd-dcfb2b6c05e1" />
+<img width="1860" height="915" alt="de2fe1286ead96a1ff4a2b61bff79b00" src="https://github.com/user-attachments/assets/99c6baa9-d467-45bb-a14c-6346b660eb24" />
+<img width="1860" height="915" alt="98ca3037c27a094b8280631b6ffdd70c" src="https://github.com/user-attachments/assets/f39cc06f-472c-4e3a-b91d-1027e3aab913" />
+<img width="1860" height="915" alt="3cf339e0d41b3e447556555b0466d1d3" src="https://github.com/user-attachments/assets/12ab9cd9-0136-4e32-986d-54b4650cc1e6" />
+
+
