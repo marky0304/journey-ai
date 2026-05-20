@@ -38,7 +38,6 @@ frontend/test-results/
 
 # Backend artifacts
 backend/wheels/
-backend/vector_data/
 backend/.pytest_cache/
 
 
