@@ -1,17 +1,19 @@
 import { Label } from '@/components/ui/label'
 
-const STYLES = [
+const STYLES: { value: TravelStyle; label: string; desc: string }[] = [
   { value: 'relaxed', label: '轻松休闲', desc: '每天 2-3 个景点' },
   { value: 'balanced', label: '适中平衡', desc: '有玩有闲' },
   { value: 'compact', label: '紧凑充实', desc: '打卡更多景点' },
 ]
 
+import type { TravelStyle } from '@/types/api'
+
 export function TravelStyleSelect({
   value,
   onChange,
 }: {
-  value: string
-  onChange: (v: string) => void
+  value: TravelStyle
+  onChange: (v: TravelStyle) => void
 }) {
   return (
     <div className="space-y-2">

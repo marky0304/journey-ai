@@ -5,11 +5,18 @@ import { BudgetSelector } from './components/BudgetSelector'
 import { PreferenceTags } from './components/PreferenceTags'
 import { TravelStyleSelect } from './components/TravelStyleSelect'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Loader2 } from 'lucide-react'
+import { Loader2, MapPin } from 'lucide-react'
 
 export default function PlanInputPage() {
-  const { form, setForm, submit, isLoading } = usePlanForm()
+  const {
+    form,
+    setForm,
+    submit,
+    isLoading,
+  } = usePlanForm()
 
   return (
     <div className="container mx-auto max-w-2xl px-4 py-12">
@@ -18,6 +25,19 @@ export default function PlanInputPage() {
           <CardTitle className="text-2xl">设计你的旅程</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label className="flex items-center gap-1.5">
+              <MapPin className="h-4 w-4 text-orange-500" />
+              出发城市 <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              placeholder="例如：上海、广州、杭州..."
+              value={form.start_location}
+              onChange={(e) => setForm({ ...form, start_location: e.target.value })}
+              className="text-sm"
+            />
+          </div>
+
           <DestinationInput
             value={form.destination}
             onChange={(v) => setForm({ ...form, destination: v })}
@@ -43,7 +63,7 @@ export default function PlanInputPage() {
           <Button
             className="w-full"
             size="lg"
-            disabled={!form.destination || !form.start_date || isLoading}
+            disabled={!form.start_location || !form.destination || !form.start_date || isLoading}
             onClick={submit}
           >
             {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
@@ -51,6 +71,7 @@ export default function PlanInputPage() {
           </Button>
         </CardContent>
       </Card>
+
     </div>
   )
 }

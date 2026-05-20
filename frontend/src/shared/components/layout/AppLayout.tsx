@@ -1,6 +1,8 @@
 import { Outlet } from 'react-router-dom'
 import { Header } from './Header'
 import { Footer } from './Footer'
+import { Live2DCompanion } from '@/features/travel-companion/Live2DCompanion'
+import { LoginDialog } from '@/features/auth/LoginDialog'
 
 export function AppLayout() {
   return (
@@ -10,6 +12,8 @@ export function AppLayout() {
         <Outlet />
       </main>
       <Footer />
+      <Live2DCompanion />
+      <LoginDialog />
     </div>
   )
 }

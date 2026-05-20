@@ -1,5 +1,5 @@
 import { Brain, RefreshCw, CreditCard } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 
 const features = [
   { icon: Brain, title: 'AI 智能规划', description: '多 Agent 并行协作，从交通到美食，全方位覆盖你的旅行需求' },

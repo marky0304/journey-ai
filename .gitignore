@@ -33,7 +33,12 @@ frontend/dist/
 frontend/test-results/
 *.tsbuildinfo
 
+# Claude Code
+.claude/
+
 # Backend artifacts
 backend/wheels/
+backend/vector_data/
+backend/.pytest_cache/
 
 

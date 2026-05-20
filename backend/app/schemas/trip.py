@@ -1,4 +1,4 @@
-from datetime import datetime
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -15,16 +15,16 @@ class ActivityOut(BaseModel):
     start_time: str
     end_time: str
     duration: int
-    location: GeoPoint | None = None
-    description: str | None = None
-    tips: str | None = None
-    image_url: str | None = None
+    location: Optional[GeoPoint] = None
+    description: Optional[str] = None
+    tips: Optional[str] = None
+    image_url: Optional[str] = None
 
 
 class DayPlanOut(BaseModel):
     day_index: int
     date: str
-    activities: list[ActivityOut]
+    activities: List[ActivityOut]
 
 
 class TripSummary(BaseModel):
@@ -37,9 +37,9 @@ class TripOut(BaseModel):
     destination: str
     dates: dict
     budget: dict
-    preferences: list[str]
+    preferences: List[str]
     travel_style: str
-    days: list[DayPlanOut]
+    days: List[DayPlanOut]
     summary: TripSummary
 
 
@@ -52,13 +52,39 @@ class TaskStatusOut(BaseModel):
     task_id: str
     status: str
     progress: int
-    agents: list[AgentInfo]
-    trip_id: str | None = None
-    error_message: str | None = None
+    agents: List[AgentInfo]
+    trip_id: Optional[str] = None
+    error_message: Optional[str] = None
 
 
 class PlanResponse(BaseModel):
     task_id: str
+
+
+class WeatherDay(BaseModel):
+    date: str
+    temp_max: int
+    temp_min: int
+    text_day: str
+    text_night: str
+    humidity: int = 0
+    wind_dir: str = ""
+    wind_scale: str = ""
+
+
+class WeatherInfo(BaseModel):
+    city: str
+    forecast: List[WeatherDay]
+
+
+class OutfitSuggestion(BaseModel):
+    date: str
+    suggestion: str
+
+
+class WeatherResponse(BaseModel):
+    weather: Optional[WeatherInfo] = None
+    outfits: List[OutfitSuggestion] = []
 
 
 class CancelResponse(BaseModel):

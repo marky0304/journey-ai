@@ -1,7 +1,14 @@
+import asyncio
 import json
+import uuid
 
-from app.agent.graph import extract_trip_from_final_plan, trip_graph
+from app.agent.graph import extract_trip_from_final_plan, run_trip_pipeline
 from app.agent.state import AgentState
+from app.core.database import async_session
+from app.models.task import TaskStatus as TStatus
+from app.services.geo_service import enrich_trip_geolocations
+from app.services.task_service import get_task as svc_get_task, update_task_status
+from app.services.trip_service import create_trip
 from app.tasks.celery_app import celery_app
 
 
@@ -19,6 +26,7 @@ def run_trip_planning(self, task_id: str, preferences: dict):
         "preferences": preferences.get("preferences", []),
         "travel_style": preferences.get("travel_style", "balanced"),
         "messages": [],
+        "constraints": None,
         "transport_plan": None,
         "accommodation_plan": None,
         "attraction_plan": None,
@@ -44,15 +52,27 @@ def run_trip_planning(self, task_id: str, preferences: dict):
             },
         )
 
-        result = trip_graph.invoke(initial_state)
+        result = asyncio.run(run_trip_pipeline(initial_state))
 
         if result.get("final_plan"):
             trip_data = extract_trip_from_final_plan(result["final_plan"])
+
+            async def save_trip_to_db():
+                await enrich_trip_geolocations(trip_data)
+                async with async_session() as db:
+                    task = await svc_get_task(db, uuid.UUID(task_id))
+                    trip = await create_trip(db, uuid.UUID(task_id), trip_data)
+                    await update_task_status(db, task, TStatus.completed)
+                    return trip.id
+
+            trip_uuid = asyncio.run(save_trip_to_db())
+
             redis.hset(
                 f"task:{task_id}",
                 mapping={
                     "status": "completed",
                     "progress": "100",
+                    "trip_id": str(trip_uuid),
                     "trip_data": json.dumps(trip_data, ensure_ascii=False),
                     "agents": json.dumps([
                         {"name": "coordinator", "status": "done"},

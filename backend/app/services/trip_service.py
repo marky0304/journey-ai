@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,6 +24,6 @@ async def create_trip(db: AsyncSession, task_id: uuid.UUID, trip_data: dict) -> 
     return trip
 
 
-async def get_trip(db: AsyncSession, trip_id: uuid.UUID) -> Trip | None:
+async def get_trip(db: AsyncSession, trip_id: uuid.UUID) -> Optional[Trip]:
     result = await db.execute(select(Trip).where(Trip.id == trip_id))
     return result.scalar_one_or_none()

@@ -1,9 +1,9 @@
 import uuid
 import enum
-from datetime import datetime
+from datetime import datetime, timezone
+from typing import Optional
 
-from sqlalchemy import String, DateTime, Enum as SAEnum
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import String, DateTime, Integer, Enum as SAEnum, Uuid, JSON, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base
@@ -19,10 +19,12 @@ class TaskStatus(str, enum.Enum):
 class PlanningTask(Base):
     __tablename__ = "planning_tasks"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     status: Mapped[TaskStatus] = mapped_column(SAEnum(TaskStatus), default=TaskStatus.pending)
-    preferences: Mapped[dict] = mapped_column(JSONB, default=dict)
-    celery_task_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    error_message: Mapped[str | None] = mapped_column(String(1000), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    completed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    preferences: Mapped[dict] = mapped_column(JSON, default=dict)
+    celery_task_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    progress: Mapped[int] = mapped_column(Integer, default=0)
+    agents_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    error_message: Mapped[Optional[str]] = mapped_column(String(1000), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
